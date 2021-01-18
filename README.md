@@ -72,7 +72,7 @@ We follow these steps:
 3. We train a network to classify the original images of fruit/vegetables using the same classifier but a different CNN.
 4. Result A: we combine the two CNNs and see how the merged network performs on images from either domain.
 5. We freeze the two CNNs and train a classifier to distinguish between new classes of fruits in the original domain.
-6. Result B: we evaluate the classifier on the museum domain. The museum network hasn't been trained on these new classes, so were are evaluating the network's zero-shot learning capability.
+6. Result B: we evaluate the classifier on the museum domain. The museum network hasn't been trained on these new classes, so what this is evaluating is the network's zero-shot learning capability.
 
 Take a look at [experiment.py]() for more details.
 
@@ -125,6 +125,9 @@ For example, such lower-level tasks could consist of predicting simple features 
 
 `*` Not a perfect characterization yet. It's a work in progress.
 
+```diff
++ update: this new project https://github.com/rom1mouret/mpcl formalizes those ideas.
+```
 
 ### Merging networks
 
@@ -132,11 +135,12 @@ This project uses the trained contract to find out whether the input data is fro
 In other words, it is looking for the most self-consistent set of latent units.
 This is perhaps the weakest part of this system as I don't think this will scale well to more than a handful of domains.
 
-Yet, it is not as bad as dealing with this problem with one-class classification, e.g. with autoencoders.
+Yet, it is not as bad as dealing with this problem with vanilla one-class classification, e.g. with an ensemble of autoencoders.
 The one-class way is to train a one-class classifier for each domain and use one-class probabilities/scores as criteria to pick the right CNN.
-This is even harder to scale up to many domains because such one-class classifiers are typically tricky to calibrate for comparing scores, not to mention that one poor one-class classifier is enough to ruin the entire decision process.
+This is even harder to scale up to many domains because such one-class classifiers are typically tricky to calibrate for comparing scores.
 
 In contrast, we use only one contract network for all the CNNs since all domains are supposed to abide by the same contract.
+There is no need for calibration.
 
 
 ### Implementation details
